@@ -19,4 +19,14 @@ $ npm start
 $ npm run generate
 ```
 
-For detailed explanation on how things work, check out the [Nuxt.js](https://github.com/nuxt/nuxt.js) and [Vuetify.js](https://vuetifyjs.com/) documentation.
+
+Конвертер валют на NUXTJS + VUETIFY
+
+
+Форма конвертера вынесена в отдельный компонент.
+
+
+Данные берутся по бесплатному ключу с FIXER.IO
+
+
+
