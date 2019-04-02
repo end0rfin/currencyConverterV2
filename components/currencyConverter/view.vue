@@ -102,8 +102,6 @@ export default {
 			// Загружен ли курс. Если нет, то ошибка
 			loadedRates: false,
 
-			changeSide: false,
-
 			// Объект по умолчанию
 			converter: {
 				oLeft:0,
@@ -124,24 +122,26 @@ export default {
 		convertRight(){
 			this.convert(this.converter.cRight,this.converter.cLeft)
 		},
-		// Конвертация полей
-		convert(from,to){
-			this.converter.oLeft = ((this.converter.oLeft == '') || (this.converter.oLeft == null))?0:this.converter.oLeft
-			this.converter.oRight = ((this.converter.oRight == '') || (this.converter.oRight == null))?0:this.converter.oRight
+		// Конвертация курсов полей
+		convert(from,to){			
+			this.converter.oLeft = (typeof this.converter.oLeft == 'undefined')?1:this.converter.oLeft
+			this.converter.oRight = (typeof this.converter.oRight == 'undefined')?1:this.converter.oRight
 
-			if (this.changeSide) {
-				this.converter.oRight = this.converter.rates[to] * this.converter.oLeft
+			this.converter.oLeft = ((this.converter.oLeft == '') || (this.converter.oLeft == null) || (this.converter.oLeft == 'undefined'))?0:this.converter.oLeft
+			this.converter.oRight = ((this.converter.oRight == '') || (this.converter.oRight == null) || (this.converter.oRight == 'undefined'))?0:this.converter.oRight
 
-				this.changeSide = false
-				return false
-			}
 
+			let cLi = this.converter.rates[from]
+			let cRi = this.converter.rates[to]
+			let oLi = this.converter.oLeft
+			let oRi = this.converter.oRight
+			
+			// Если вводится правое поле
 			if (from != this.converter.cLeft) {
-				this.converter.oLeft = this.converter.oRight * this.converter.rates[to]
+				this.converter.oLeft = (cRi * oRi) / cLi
 				return true
 			}
-			this.converter.oRight = (1 / this.converter.rates[from]) * this.converter.oLeft
-			
+			this.converter.oRight = (cRi / cLi) * oLi
 			return true
 		}
 	},
@@ -157,8 +157,8 @@ export default {
 			this.converter = {
 				cLeft:'RUB',
 				cRight:r.base,
-				oLeft: 1,
-				oRight:(1 / r.rates[r.base]) * ((1 / r.rates['RUB']) * 1),
+				oLeft: r.rates['RUB'],
+				oRight:r.rates[r.base],
 				rates:r.rates,
 				symbols:r.symbols,
 				symbolsText:sText
